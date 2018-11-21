@@ -16,13 +16,14 @@
 
 
 <meta name="description" content="Go语言借助接口实现多态。Go语言中接口可以隐式实现，只要实现了接口中所有声明的方法即可。 使用接口实现多态一个接口类型的变量，可以持有任何实现了接口的值。接口的这个特性用来实现多态。 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758">
+<meta name="keywords" content="Go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go: 多态">
-<meta property="og:url" content="http://yoursite.com/2018/11/21/Go-多态/index.html">
+<meta property="og:url" content="https://babyachievement.github.io/2018/11/21/Go-多态/index.html">
 <meta property="og:site_name" content="Babyachievement">
 <meta property="og:description" content="Go语言借助接口实现多态。Go语言中接口可以隐式实现，只要实现了接口中所有声明的方法即可。 使用接口实现多态一个接口类型的变量，可以持有任何实现了接口的值。接口的这个特性用来实现多态。 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-21T06:16:03.642Z">
+<meta property="og:updated_time" content="2018-11-21T06:21:57.697Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Go: 多态">
 <meta name="twitter:description" content="Go语言借助接口实现多态。Go语言中接口可以隐式实现，只要实现了接口中所有声明的方法即可。 使用接口实现多态一个接口类型的变量，可以持有任何实现了接口的值。接口的这个特性用来实现多态。 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758">
@@ -97,7 +98,7 @@
 <div class="intrude-less">
     <header id="header" class="inner">
         <a href="/" class="profilepic">
-            <img src="/img/avatar.png" class="animated zoomIn">
+            <img src="/img/avatar.jpg" class="animated zoomIn">
         </a>
         <hgroup>
           <h1 class="header-author"><a href="/">babyachievement</a></h1>
@@ -182,7 +183,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a></li></ul>
                     </div>
                 </section>
                 
@@ -222,7 +223,7 @@
     <div class="intrude-less">
         <header id="header" class="inner">
             <a href="/" class="profilepic">
-                <img src="/img/avatar.png" class="animated zoomIn">
+                <img src="/img/avatar.jpg" class="animated zoomIn">
             </a>
             <hgroup>
               <h1 class="header-author"><a href="/" title="回到主页">babyachievement</a></h1>
@@ -286,6 +287,10 @@
         
 
         
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Go/">Go</a></li></ul>
+    </div>
+
         <div class="clearfix"></div>
       </div>
       
@@ -306,10 +311,10 @@
         <p><span>本文标题:</span><a href="/2018/11/21/Go-多态/">Go: 多态</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">babyachievement</a></p>
         <p><span>发布时间:</span>2018-11-21, 13:52:45</p>
-        <p><span>最后更新:</span>2018-11-21, 14:16:03</p>
+        <p><span>最后更新:</span>2018-11-21, 14:21:57</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/11/21/Go-多态/" title="Go: 多态">http://yoursite.com/2018/11/21/Go-多态/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2018/11/21/Go-多态/　　作者: babyachievement" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/11/21/Go-多态/" title="Go: 多态">https://babyachievement.github.io/2018/11/21/Go-多态/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://babyachievement.github.io/2018/11/21/Go-多态/　　作者: babyachievement" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -320,6 +325,12 @@
 
 
     <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/11/21/Go-Defer/">
+                    Go: Defer
+                </a>
+            </div>
         
         
             <div id="article-nav-older" class="article-nav-title">
@@ -392,7 +403,9 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+            <a href="/2018/11/21/Go-Defer/" title="上一篇: Go: Defer">
+                <i class="fa fa-angle-left"></i>
+            </a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
@@ -404,7 +417,7 @@
         
     </div>
 
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-多态/">Go: 多态</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/hello-world/">Hello World</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-错误处理/">Go: 错误处理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-Defer/">Go: Defer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-多态/">Go: 多态</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/hello-world/">Hello World</a></li></ul>
 
 
 

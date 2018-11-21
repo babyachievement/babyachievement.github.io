@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="author" content="babyachievement">
+
+
+
+<meta name="description" content="什么是错误？错误表示程序中的异常情况。比如在打开文件的时候，如果文件不存在，这就是个异常情况，使用错误来表示。 Go中的错误是普通的旧值。使用内置的error类型表示。就像其他内置的类型一样，错误值可以存储在变量中，作为函数的返回值等。 123456789101112131415package mainimport (      &quot;fmt&quot;    &quot;os&quot;)func main() &amp;#123;">
+<meta name="keywords" content="Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go: 错误处理">
+<meta property="og:url" content="https://babyachievement.github.io/2018/11/21/Go-错误处理/index.html">
+<meta property="og:site_name" content="Babyachievement">
+<meta property="og:description" content="什么是错误？错误表示程序中的异常情况。比如在打开文件的时候，如果文件不存在，这就是个异常情况，使用错误来表示。 Go中的错误是普通的旧值。使用内置的error类型表示。就像其他内置的类型一样，错误值可以存储在变量中，作为函数的返回值等。 123456789101112131415package mainimport (      &quot;fmt&quot;    &quot;os&quot;)func main() &amp;#123;">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-21T07:28:32.371Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go: 错误处理">
+<meta name="twitter:description" content="什么是错误？错误表示程序中的异常情况。比如在打开文件的时候，如果文件不存在，这就是个异常情况，使用错误来表示。 Go中的错误是普通的旧值。使用内置的error类型表示。就像其他内置的类型一样，错误值可以存储在变量中，作为函数的返回值等。 123456789101112131415package mainimport (      &quot;fmt&quot;    &quot;os&quot;)func main() &amp;#123;">
+
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Babyachievement" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Go: 错误处理 | Babyachievement</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: 
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head></html>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">babyachievement</a></h1>
+        </hgroup>
+
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:123@123.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于前端</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">babyachievement</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">babyachievement</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:123@123.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我">
+</nav>
+      <div class="body-wrap"><article id="post-Go-错误处理" class="article article-type-post" itemscope="" itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/11/21/Go-错误处理/" class="article-date">
+      <time datetime="2018-11-21T06:55:21.000Z" itemprop="datePublished">2018-11-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Go: 错误处理
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Go/">Go</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="什么是错误？"><a href="#什么是错误？" class="headerlink" title="什么是错误？"></a>什么是错误？</h1><p>错误表示程序中的异常情况。比如在打开文件的时候，如果文件不存在，这就是个异常情况，使用错误来表示。</p>
+<p>Go中的错误是普通的旧值。使用内置的error类型表示。就像其他内置的类型一样，错误值可以存储在变量中，作为函数的返回值等。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"os"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    f, err := os.Open(<span class="string">"/test.txt"</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(err)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(f.Name(), <span class="string">"opened successfully"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的例子中，尝试打开文件/test.txt，os包中的Open函数的签名为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">func Open(name string) (file *File, err error)</span><br></pre></td></tr></table></figure></p>
+<p>如果文件成功打开，那么Open函数将返回文件句柄，error将为nil，如果打开文件是出错了，一个非nil的错误将被返回。如果函数或方法返回错误，那么按照惯例，错误将作为最后一个返回值返回。</p>
+<p>Go中处理错误的管用方式是将返回的错误与nil比较。nil表示没有错误出现，非nil表示有错误出现。</p>
+<h1 id="错误类型的表示"><a href="#错误类型的表示" class="headerlink" title="错误类型的表示"></a>错误类型的表示</h1><p>error类型是一个接口类型，定义如下：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> error <span class="keyword">interface</span> &#123;  </span><br><span class="line">    Error() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>error接口只包含一个Erorr()string方法，任何实现了该接口的类型都可以作为错误使用。调用fmt.Println函数打印错误的时候，内部将调用Error()string方法获取错误的描述。</p>
+<h1 id="从error中提取更多信息的不同方式"><a href="#从error中提取更多信息的不同方式" class="headerlink" title="从error中提取更多信息的不同方式"></a>从error中提取更多信息的不同方式</h1><p>我们既然知道error是个接口类型，那么如何从错误中提取更多信息。</p>
+<h2 id="1-断言底层struct类型从struct字段中获取更多信息"><a href="#1-断言底层struct类型从struct字段中获取更多信息" class="headerlink" title="1. 断言底层struct类型从struct字段中获取更多信息"></a>1. 断言底层struct类型从struct字段中获取更多信息</h2><p>Open函数返回的错误类型为*PathError，PathError是一个结构类型，定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">type PathError struct &#123;  </span><br><span class="line">    Op   string</span><br><span class="line">    Path string</span><br><span class="line">    Err  error</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (e *PathError) Error() string &#123; return e.Op + &quot; &quot; + e.Path + &quot;: &quot; + e.Err.Error() &#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以在代码中断言error类型是不是* os.PathError,以获取Path和Op字段：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"os"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    f, err := os.Open(<span class="string">"/test.txt"</span>)</span><br><span class="line">    <span class="keyword">if</span> err, ok := err.(*os.PathError); ok &#123;</span><br><span class="line">        fmt.Println(<span class="string">"File at path"</span>, err.Path, <span class="string">"failed to open"</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(f.Name(), <span class="string">"opened successfully"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-断言底层struct类型通过方法中获取更多信息"><a href="#2-断言底层struct类型通过方法中获取更多信息" class="headerlink" title="2. 断言底层struct类型通过方法中获取更多信息"></a>2. 断言底层struct类型通过方法中获取更多信息</h2><p>第二个获取更多错误信息的方式是通过调用底层错误类型的方法。比如DNSError结构类型，它定义了TimeOut,Temporary等方法，可以调用这些方法获取更多的错误信息。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"net"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    addr, err := net.LookupHost(<span class="string">"golangbot123.com"</span>)</span><br><span class="line">    <span class="keyword">if</span> err, ok := err.(*net.DNSError); ok &#123;</span><br><span class="line">        <span class="keyword">if</span> err.Timeout() &#123;</span><br><span class="line">            fmt.Println(<span class="string">"operation timed out"</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> err.Temporary() &#123;</span><br><span class="line">            fmt.Println(<span class="string">"temporary error"</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            fmt.Println(<span class="string">"generic error: "</span>, err)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(addr)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-直接比较"><a href="#3-直接比较" class="headerlink" title="3. 直接比较"></a>3. 直接比较</h2><p>第三个获取更多错误信息的方式是通过与一个error类型的变量直接比较。</p>
+<p>filepath包中的Glob函数用于返回匹配模式的所有文件的名称。这个函数在模式异常时会返回一个ErrBadPattern错误。</p>
+<p>ErrBadPattern定义在filepath中：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ErrBadPattern = errors.New(<span class="string">"syntax error in pattern"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>ErrBadPattern在模式异常时被Glob函数返回。可以通过比较检查这个错误信息：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"path/filepath"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    files, error := filepath.Glob(<span class="string">"["</span>)</span><br><span class="line">    <span class="keyword">if</span> error != <span class="literal">nil</span> &amp;&amp; error == filepath.ErrBadPattern &#123;</span><br><span class="line">        fmt.Println(error)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">"matched files"</span>, files)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="不要忽略错误"><a href="#不要忽略错误" class="headerlink" title="不要忽略错误"></a>不要忽略错误</h1><p>绝对不要忽略错误。忽略错误将引来麻烦。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/11/21/Go-错误处理/">Go: 错误处理</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">babyachievement</a></p>
+        <p><span>发布时间:</span>2018-11-21, 14:55:21</p>
+        <p><span>最后更新:</span>2018-11-21, 15:28:32</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/11/21/Go-错误处理/" title="Go: 错误处理">https://babyachievement.github.io/2018/11/21/Go-错误处理/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://babyachievement.github.io/2018/11/21/Go-错误处理/　　作者: babyachievement" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target="_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/11/21/Go-Defer/">
+                    Go: Defer
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是错误？"><span class="toc-number">1.</span> <span class="toc-text">什么是错误？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#错误类型的表示"><span class="toc-number">2.</span> <span class="toc-text">错误类型的表示</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#从error中提取更多信息的不同方式"><span class="toc-number">3.</span> <span class="toc-text">从error中提取更多信息的不同方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-断言底层struct类型从struct字段中获取更多信息"><span class="toc-number">3.1.</span> <span class="toc-text">1. 断言底层struct类型从struct字段中获取更多信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-断言底层struct类型通过方法中获取更多信息"><span class="toc-number">3.2.</span> <span class="toc-text">2. 断言底层struct类型通过方法中获取更多信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-直接比较"><span class="toc-number">3.3.</span> <span class="toc-text">3. 直接比较</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#不要忽略错误"><span class="toc-number">4.</span> <span class="toc-text">不要忽略错误</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录" title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Go: 错误处理　| Babyachievement　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/11/21/Go-Defer/" title="下一篇: Go: Defer">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-错误处理/">Go: 错误处理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-Defer/">Go: Defer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-多态/">Go: 多态</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/hello-world/">Hello World</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 babyachievement
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style="display:none">
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style="display:none">
+                        <span id="page-visit" title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

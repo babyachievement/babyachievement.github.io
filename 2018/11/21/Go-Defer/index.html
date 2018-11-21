@@ -14,17 +14,19 @@
 <meta name="author" content="babyachievement">
 
 
-    
-    
 
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="Babyachievement">
-<meta property="og:url" content="https://babyachievement.github.io/index.html">
+<meta name="description" content="Defer是什么？Defer语句用于在所在的函数执行return之前调用函数。类似于Java中finally的作用。 1234567891011121314151617181920212223242526package mainimport (	&quot;fmt&quot;)func finished() &amp;#123;	fmt.Println(&quot;Finished finding largest&quot;)&amp;#125;fun">
+<meta name="keywords" content="Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go: Defer">
+<meta property="og:url" content="https://babyachievement.github.io/2018/11/21/Go-Defer/index.html">
 <meta property="og:site_name" content="Babyachievement">
+<meta property="og:description" content="Defer是什么？Defer语句用于在所在的函数执行return之前调用函数。类似于Java中finally的作用。 1234567891011121314151617181920212223242526package mainimport (	&quot;fmt&quot;)func finished() &amp;#123;	fmt.Println(&quot;Finished finding largest&quot;)&amp;#125;fun">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-21T06:42:52.687Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Babyachievement">
+<meta name="twitter:title" content="Go: Defer">
+<meta name="twitter:description" content="Defer是什么？Defer语句用于在所在的函数执行return之前调用函数。类似于Java中finally的作用。 1234567891011121314151617181920212223242526package mainimport (	&quot;fmt&quot;)func finished() &amp;#123;	fmt.Println(&quot;Finished finding largest&quot;)&amp;#125;fun">
 
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
@@ -52,13 +54,11 @@
 <link rel="stylesheet" href="/css/style.css">
 
 
-    <style> .article { opacity: 0;} </style>
-
 
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Babyachievement</title>
+<title>Go: Defer | Babyachievement</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -67,8 +67,8 @@
     var yiliaConfig = {
         fancybox: true,
         animate: true,
-        isHome: true,
-        isPost: false,
+        isHome: false,
+        isPost: true,
         isArchive: false,
         isTag: false,
         isCategory: false,
@@ -258,88 +258,7 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我">
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-Go-错误处理" class="article article-type-post" itemscope="" itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/11/21/Go-错误处理/" class="article-date">
-      <time datetime="2018-11-21T06:55:21.000Z" itemprop="datePublished">2018-11-21</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/21/Go-错误处理/">Go: 错误处理</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h1 id="什么是错误？"><a href="#什么是错误？" class="headerlink" title="什么是错误？"></a>什么是错误？</h1><p>错误表示程序中的异常情况。比如在打开文件的时候，如果文件不存在，这就是个异常情况，使用错误来表示。</p>
-<p>Go中的错误是普通的旧值。使用内置的error类型表示。就像其他内置的类型一样，错误值可以存储在变量中，作为函数的返回值等。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"os"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    f, err := os.Open(<span class="string">"/test.txt"</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(err)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(f.Name(), <span class="string">"opened successfully"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在上面的例子中，尝试打开文件/test.txt，os包中的Open函数的签名为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">func Open(name string) (file *File, err error)</span><br></pre></td></tr></table></figure></p>
-<p>如果文件成功打开，那么Open函数将返回文件句柄，error将为nil，如果打开文件是出错了，一个非nil的错误将被返回。如果函数或方法返回错误，那么按照惯例，错误将作为最后一个返回值返回。</p>
-<p>Go中处理错误的管用方式是将返回的错误与nil比较。nil表示没有错误出现，非nil表示有错误出现。</p>
-<h1 id="错误类型的表示"><a href="#错误类型的表示" class="headerlink" title="错误类型的表示"></a>错误类型的表示</h1><p>error类型是一个接口类型，定义如下：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> error <span class="keyword">interface</span> &#123;  </span><br><span class="line">    Error() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>error接口只包含一个Erorr()string方法，任何实现了该接口的类型都可以作为错误使用。调用fmt.Println函数打印错误的时候，内部将调用Error()string方法获取错误的描述。</p>
-<h1 id="从error中提取更多信息的不同方式"><a href="#从error中提取更多信息的不同方式" class="headerlink" title="从error中提取更多信息的不同方式"></a>从error中提取更多信息的不同方式</h1><p>我们既然知道error是个接口类型，那么如何从错误中提取更多信息。</p>
-<h2 id="1-断言底层struct类型从struct字段中获取更多信息"><a href="#1-断言底层struct类型从struct字段中获取更多信息" class="headerlink" title="1. 断言底层struct类型从struct字段中获取更多信息"></a>1. 断言底层struct类型从struct字段中获取更多信息</h2><p>Open函数返回的错误类型为*PathError，PathError是一个结构类型，定义如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">type PathError struct &#123;  </span><br><span class="line">    Op   string</span><br><span class="line">    Path string</span><br><span class="line">    Err  error</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (e *PathError) Error() string &#123; return e.Op + &quot; &quot; + e.Path + &quot;: &quot; + e.Err.Error() &#125;</span><br></pre></td></tr></table></figure>
-<p>我们可以在代码中断言error类型是不是* os.PathError,以获取Path和Op字段：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"os"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    f, err := os.Open(<span class="string">"/test.txt"</span>)</span><br><span class="line">    <span class="keyword">if</span> err, ok := err.(*os.PathError); ok &#123;</span><br><span class="line">        fmt.Println(<span class="string">"File at path"</span>, err.Path, <span class="string">"failed to open"</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(f.Name(), <span class="string">"opened successfully"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="2-断言底层struct类型通过方法中获取更多信息"><a href="#2-断言底层struct类型通过方法中获取更多信息" class="headerlink" title="2. 断言底层struct类型通过方法中获取更多信息"></a>2. 断言底层struct类型通过方法中获取更多信息</h2><p>第二个获取更多错误信息的方式是通过调用底层错误类型的方法。比如DNSError结构类型，它定义了TimeOut,Temporary等方法，可以调用这些方法获取更多的错误信息。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"net"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    addr, err := net.LookupHost(<span class="string">"golangbot123.com"</span>)</span><br><span class="line">    <span class="keyword">if</span> err, ok := err.(*net.DNSError); ok &#123;</span><br><span class="line">        <span class="keyword">if</span> err.Timeout() &#123;</span><br><span class="line">            fmt.Println(<span class="string">"operation timed out"</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> err.Temporary() &#123;</span><br><span class="line">            fmt.Println(<span class="string">"temporary error"</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            fmt.Println(<span class="string">"generic error: "</span>, err)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(addr)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="3-直接比较"><a href="#3-直接比较" class="headerlink" title="3. 直接比较"></a>3. 直接比较</h2><p>第三个获取更多错误信息的方式是通过与一个error类型的变量直接比较。</p>
-<p>filepath包中的Glob函数用于返回匹配模式的所有文件的名称。这个函数在模式异常时会返回一个ErrBadPattern错误。</p>
-<p>ErrBadPattern定义在filepath中：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ErrBadPattern = errors.New(<span class="string">"syntax error in pattern"</span>)</span><br></pre></td></tr></table></figure></p>
-<p>ErrBadPattern在模式异常时被Glob函数返回。可以通过比较检查这个错误信息：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"path/filepath"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    files, error := filepath.Glob(<span class="string">"["</span>)</span><br><span class="line">    <span class="keyword">if</span> error != <span class="literal">nil</span> &amp;&amp; error == filepath.ErrBadPattern &#123;</span><br><span class="line">        fmt.Println(error)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">"matched files"</span>, files)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="不要忽略错误"><a href="#不要忽略错误" class="headerlink" title="不要忽略错误"></a>不要忽略错误</h1><p>绝对不要忽略错误。忽略错误将引来麻烦。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Go/">Go</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Go-Defer" class="article article-type-post" itemscope="" itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Go-Defer" class="article article-type-post" itemscope="" itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2018/11/21/Go-Defer/" class="article-date">
@@ -357,12 +276,23 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/21/Go-Defer/">Go: Defer</a>
+    <h1 class="article-title" itemprop="name">
+      Go: Defer
     </h1>
   
 
       </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Go/">Go</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -388,148 +318,91 @@
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Go/">Go</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
   
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Go-多态" class="article article-type-post" itemscope="" itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/11/21/Go-多态/" class="article-date">
-      <time datetime="2018-11-21T05:52:45.000Z" itemprop="datePublished">2018-11-21</time>
-</a>
-
-
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/11/21/Go-Defer/">Go: Defer</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">babyachievement</a></p>
+        <p><span>发布时间:</span>2018-11-21, 14:21:29</p>
+        <p><span>最后更新:</span>2018-11-21, 14:42:52</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/11/21/Go-Defer/" title="Go: Defer">https://babyachievement.github.io/2018/11/21/Go-Defer/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://babyachievement.github.io/2018/11/21/Go-Defer/　　作者: babyachievement" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target="_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
     </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy">
-    
-    
-      <header class="article-header">
+
+
+
+    <nav id="article-nav">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/21/Go-多态/">Go: 多态</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>Go语言借助接口实现多态。Go语言中接口可以隐式实现，只要实现了接口中所有声明的方法即可。</p>
-<h2 id="使用接口实现多态"><a href="#使用接口实现多态" class="headerlink" title="使用接口实现多态"></a>使用接口实现多态</h2><p>一个接口类型的变量，可以持有任何实现了接口的值。接口的这个特性用来实现多态。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Income <span class="keyword">interface</span> &#123;</span><br><span class="line">	calculate() <span class="keyword">int</span></span><br><span class="line">	source() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> FixedBilling <span class="keyword">struct</span> &#123;</span><br><span class="line">	projectName <span class="keyword">string</span></span><br><span class="line">	biddedAmount <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> TimeAndMaterial <span class="keyword">struct</span> &#123;</span><br><span class="line">	projectName <span class="keyword">string</span></span><br><span class="line">	noOfHours  <span class="keyword">int</span></span><br><span class="line">	hourlyRate <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(fb FixedBilling)</span> <span class="title">calculate</span><span class="params">()</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> fb.biddedAmount</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(fb FixedBilling)</span> <span class="title">source</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> fb.projectName</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(tm TimeAndMaterial)</span> <span class="title">calculate</span><span class="params">()</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> tm.noOfHours * tm.hourlyRate</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(tm TimeAndMaterial)</span> <span class="title">source</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> tm.projectName</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Advertisement <span class="keyword">struct</span> &#123;</span><br><span class="line">	adName     <span class="keyword">string</span></span><br><span class="line">	CPC        <span class="keyword">int</span></span><br><span class="line">	noOfClicks <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a Advertisement)</span> <span class="title">calculate</span><span class="params">()</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> a.CPC * a.noOfClicks</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a Advertisement)</span> <span class="title">source</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> a.adName</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">calculateNetIncome</span><span class="params">(ic []Income)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> netincome <span class="keyword">int</span> = <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> _, income := <span class="keyword">range</span> ic &#123;</span><br><span class="line">		fmt.Printf(<span class="string">"Income From %s = $%d\n"</span>, income.source(), income.calculate())</span><br><span class="line">		netincome += income.calculate()</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">"Net income of organisation = $%d"</span>, netincome)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	project1 := FixedBilling&#123;projectName: <span class="string">"Project 1"</span>, biddedAmount: <span class="number">5000</span>&#125;</span><br><span class="line">	project2 := FixedBilling&#123;projectName: <span class="string">"Project 2"</span>, biddedAmount: <span class="number">10000</span>&#125;</span><br><span class="line">	project3 := TimeAndMaterial&#123;projectName: <span class="string">"Project 3"</span>, noOfHours: <span class="number">160</span>, hourlyRate: <span class="number">25</span>&#125;</span><br><span class="line">	bannerAd := Advertisement&#123;adName: <span class="string">"Banner Ad"</span>, CPC: <span class="number">2</span>, noOfClicks: <span class="number">500</span>&#125;</span><br><span class="line">	popupAd := Advertisement&#123;adName: <span class="string">"Popup Ad"</span>, CPC: <span class="number">5</span>, noOfClicks: <span class="number">750</span>&#125;</span><br><span class="line">	incomeStreams := []Income&#123;project1, project2, project3, bannerAd, popupAd&#125;</span><br><span class="line">	calculateNetIncome(incomeStreams)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Go/">Go</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope="" itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/11/21/hello-world/" class="article-date">
-      <time datetime="2018-11-21T03:06:45.994Z" itemprop="datePublished">2018-11-21</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy">
-    
-    
-      <header class="article-header">
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/11/21/Go-错误处理/">
+                    Go: 错误处理
+                </a>
+            </div>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/21/hello-world/">Hello World</a>
-    </h1>
-  
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/11/21/Go-多态/">
+                    Go: 多态
+                </a>
+            </div>
+        
+    </nav>
 
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
   
 </article>
 
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Defer是什么？"><span class="toc-number">1.</span> <span class="toc-text">Defer是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Defer-方法"><span class="toc-number">2.</span> <span class="toc-text">Defer 方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参数计算"><span class="toc-number">3.</span> <span class="toc-text">参数计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#defer栈"><span class="toc-number">4.</span> <span class="toc-text">defer栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#defer的实际运用"><span class="toc-number">5.</span> <span class="toc-text">defer的实际运用</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录" title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Go: Defer　| Babyachievement　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
 
 
 
@@ -537,9 +410,35 @@
 
 
 
+    
 
-  
-  
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/11/21/Go-错误处理/" title="上一篇: Go: 错误处理">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/11/21/Go-多态/" title="下一篇: Go: 多态">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-错误处理/">Go: 错误处理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-Defer/">Go: Defer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-多态/">Go: 多态</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/hello-world/">Hello World</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
 </div>
       <footer id="footer">
     <div class="outer">
