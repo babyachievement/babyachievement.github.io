@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head><meta name="generator" content="Hexo 3.8.0">
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="author" content="babyachievement">
+
+
+
+<meta name="description" content="ApplicationContext作为IOC的的核心组件之一，相比于BeanFactory，ApplicationContext还提供了ResourceLoader功能，ApplicationEventPublisher功能以及MessageSource功能。 ResourceLoaderResourceLoader接口用于加载各种路径下的资源，比如类路径下资源，文件系统中的资源等。Resour">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring-2-ApplicationContext">
+<meta property="og:url" content="https://babyachievement.github.io/2018/12/26/Spring-2-ApplicationContext/index.html">
+<meta property="og:site_name" content="Babyachievement">
+<meta property="og:description" content="ApplicationContext作为IOC的的核心组件之一，相比于BeanFactory，ApplicationContext还提供了ResourceLoader功能，ApplicationEventPublisher功能以及MessageSource功能。 ResourceLoaderResourceLoader接口用于加载各种路径下的资源，比如类路径下资源，文件系统中的资源等。Resour">
+<meta property="og:locale" content="cn">
+<meta property="og:image" content="https://babyachievement.github.io/2018/12/26/Spring-2-ApplicationContext/ApplicationEvent.png">
+<meta property="og:image" content="https://babyachievement.github.io/2018/12/26/Spring-2-ApplicationContext/ApplicationContext.png">
+<meta property="og:updated_time" content="2018-12-28T08:49:58.945Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring-2-ApplicationContext">
+<meta name="twitter:description" content="ApplicationContext作为IOC的的核心组件之一，相比于BeanFactory，ApplicationContext还提供了ResourceLoader功能，ApplicationEventPublisher功能以及MessageSource功能。 ResourceLoaderResourceLoader接口用于加载各种路径下的资源，比如类路径下资源，文件系统中的资源等。Resour">
+<meta name="twitter:image" content="https://babyachievement.github.io/2018/12/26/Spring-2-ApplicationContext/ApplicationEvent.png">
+
+<link rel="apple-touch-icon" href="http://localhost:4000/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Babyachievement" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/green/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Spring-2-ApplicationContext | Babyachievement</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    };
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "http://localhost:4000"; </script>
+
+
+
+
+
+
+</head></html>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://localhost:4000/img/avatar.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">babyachievement</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false">
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class="no-result">No results found <i class="fa fa-spinner fa-pulse"></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="http://localhost:4000/">主页</a></li>
+                        
+                            <li><a href="http://localhost:4000/archives/">所有文章</a></li>
+                        
+                            <li><a href="http://localhost:4000/tags/">标签云</a></li>
+                        
+                            <li><a href="http://localhost:4000/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:babyacievement@gmail.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AOP/">AOP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGLIB/">CGLIB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Security/">Spring-Security</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">沙弥</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">babyachievement</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://localhost:4000/img/avatar.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">babyachievement</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:babyacievement@gmail.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我">
+</nav>
+      <div class="body-wrap"><article id="post-Spring-2-ApplicationContext" class="article article-type-post" itemscope="" itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/12/26/Spring-2-ApplicationContext/" class="article-date">
+      <time datetime="2018-12-26T02:28:56.000Z" itemprop="datePublished">2018-12-26</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Spring-2-ApplicationContext
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="ApplicationContext"><a href="#ApplicationContext" class="headerlink" title="ApplicationContext"></a>ApplicationContext</h1><p>作为IOC的的核心组件之一，相比于BeanFactory，ApplicationContext还提供了ResourceLoader功能，ApplicationEventPublisher功能以及MessageSource功能。</p>
+<h2 id="ResourceLoader"><a href="#ResourceLoader" class="headerlink" title="ResourceLoader"></a>ResourceLoader</h2><p>ResourceLoader接口用于加载各种路径下的资源，比如类路径下资源，文件系统中的资源等。ResourceLoader的默认实现DefaultResourceLoader，它的Resource getResource(String location) 方法会通过先注册的ProtocolResolver去尝试解析location，如果某个ProtocolResolver解析成功，直接返回一个Resource。如果解析失败，会依次判断是否以/开头，或者前缀为”classpath:”，如果都不满足则会创建以个URL，根据URL的协议读取本地文件或远程资源，具体代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Resource <span class="title">getResource</span><span class="params">(String location)</span> </span>&#123;</span><br><span class="line">	Assert.notNull(location, <span class="string">"Location must not be null"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (ProtocolResolver protocolResolver : <span class="keyword">this</span>.protocolResolvers) &#123;</span><br><span class="line">		Resource resource = protocolResolver.resolve(location, <span class="keyword">this</span>);</span><br><span class="line">		<span class="keyword">if</span> (resource != <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> resource;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (location.startsWith(<span class="string">"/"</span>)) &#123;</span><br><span class="line">		<span class="keyword">return</span> getResourceByPath(location);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (location.startsWith(CLASSPATH_URL_PREFIX)) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">// Try to parse the location as a URL...</span></span><br><span class="line">			URL url = <span class="keyword">new</span> URL(location);</span><br><span class="line">			<span class="keyword">return</span> (ResourceUtils.isFileURL(url) ? <span class="keyword">new</span> FileUrlResource(url) : <span class="keyword">new</span> UrlResource(url));</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (MalformedURLException ex) &#123;</span><br><span class="line">			<span class="comment">// No URL -&gt; resolve as resource path.</span></span><br><span class="line">			<span class="keyword">return</span> getResourceByPath(location);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="ApplicationEventPublisher"><a href="#ApplicationEventPublisher" class="headerlink" title="ApplicationEventPublisher"></a>ApplicationEventPublisher</h2><p>ApplicationEventPublisher接口用于发布ApplicationEvent事件。最终事件会通知到各个ApplicationListener。</p>
+<img src="/2018/12/26/Spring-2-ApplicationContext/ApplicationEvent.png" title="ApplicationEvent类图">
+<h2 id="MessageSource"><a href="#MessageSource" class="headerlink" title="MessageSource"></a>MessageSource</h2><p>MessageSource主要用于解析消息，支持参数化和国际化。</p>
+<h1 id="ApplicationContext-继承关系"><a href="#ApplicationContext-继承关系" class="headerlink" title="ApplicationContext 继承关系"></a>ApplicationContext 继承关系</h1><img src="/2018/12/26/Spring-2-ApplicationContext/ApplicationContext.png" title="ApplicationContext类图">
+<p>ApplicationContext接口有两个子接口分支：ConfigurableApplicationContext和WebApplicationContext。ConfigurableApplicationContext添加了配置功能，继承了Lifecycle和Closeable，提供了生命周期管理：addApplicationListener为ApplicationEventPublisher接口提供了ApplicationListener,addProtocolResolver方法提供了添加Resource解析器的功能，setEnvironment为EnvironmentCapable接口提供了修改Environment的功能，setId提供了修改ApplicationContext Id的功能，setParent为HierarchicalBeanFactory提供了设置父ApplicationContext和父BeanFactory的功能， 此外 ConfigurableApplicationContext还提供了refresh用于刷新，isActive判断状态，close方法用于关闭和释放资源，并且addBeanFactoryPostProcessor提供了添加BeanFactoryPostProcessor的功能，这些BeanFactoryPostProcessor将会在ApplicationContext内部的BeanFactory refresh时，评估任何BeanDefinition之前被调用。而WebApplicationContext提供了获取ServletContext方法，以及SCOPE_REQUEST、SCOPE_SESSION和SCOPE_APPLICATION Bean。</p>
+<p>ConfigurableApplicationContext有一个继承接口ConfigurableWebApplicationContext和抽象子类AbstractApplicationContext。</p>
+<p>AbstractApplicationContext类通过模板方法设计模式为子类提供了框架，具体的实现在子类中。其中最重要的是refresh方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">refresh</span><span class="params">()</span> <span class="keyword">throws</span> BeansException, IllegalStateException </span>&#123;</span><br><span class="line">	<span class="keyword">synchronized</span> (<span class="keyword">this</span>.startupShutdownMonitor) &#123;</span><br><span class="line">		<span class="comment">// 1. 为刷新context做准备，加载属性文件，设置环境信息和context状态信息</span></span><br><span class="line">		prepareRefresh();</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Tell the subclass to refresh the internal bean factory.</span></span><br><span class="line">		<span class="comment">// 2. 获取内部BeanFactory,其中调用了refreshBeanFactory和getBeanFactory，由子类实现</span></span><br><span class="line">		ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 3. 配置beanFactory的标准上下特征，比如ClassLoader和post-processors.</span></span><br><span class="line">		prepareBeanFactory(beanFactory);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">// 4. application context的内部bean Factory初始化完成后修改它，所有的bean definition都已经加载了，但还没有实例化，这个方法可以用来注册特殊的BeanPostProcessors</span></span><br><span class="line">			postProcessBeanFactory(beanFactory);</span><br><span class="line"></span><br><span class="line">			<span class="comment">// Invoke factory processors registered as beans in the context.</span></span><br><span class="line">			<span class="comment">// 5. 实例化所有的BeanFactoryPostProcessor bean，并按照指定的顺序调用，在singleton 实例化之前调用</span></span><br><span class="line">			invokeBeanFactoryPostProcessors(beanFactory);</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 6. 注册拦截Bean创建的BeanPostProcessor</span></span><br><span class="line">			registerBeanPostProcessors(beanFactory);</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 7. 初始化Message资源</span></span><br><span class="line">			initMessageSource();</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 8. 初始化事件广播器</span></span><br><span class="line">			initApplicationEventMulticaster();</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 9. 留给子类初始化其他特殊的Bean</span></span><br><span class="line">			onRefresh();</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 10. 在所有注册Bean中查找ApplicationListener Bean,并注册到消息广播器中</span></span><br><span class="line">			registerListeners();</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 11. 初始化剩下的单例Bean(非延迟加载的)</span></span><br><span class="line">			finishBeanFactoryInitialization(beanFactory);</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 12. 完成刷新过程,通知生命周期处理器lifecycleProcessor刷新过程,同时发出ContextRefreshEvent</span></span><br><span class="line">			finishRefresh();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">catch</span> (BeansException ex) &#123;</span><br><span class="line">			<span class="keyword">if</span> (logger.isWarnEnabled()) &#123;</span><br><span class="line">				logger.warn(<span class="string">"Exception encountered during context initialization - "</span> +</span><br><span class="line">						<span class="string">"cancelling refresh attempt: "</span> + ex);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// Destroy already created singletons to avoid dangling resources.</span></span><br><span class="line">			destroyBeans();</span><br><span class="line"></span><br><span class="line">			<span class="comment">// Reset 'active' flag.</span></span><br><span class="line">			cancelRefresh(ex);</span><br><span class="line"></span><br><span class="line">			<span class="comment">// Propagate exception to caller.</span></span><br><span class="line">			<span class="keyword">throw</span> ex;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">finally</span> &#123;</span><br><span class="line">			<span class="comment">// Reset common introspection caches in Spring's core, since we</span></span><br><span class="line">			<span class="comment">// might not ever need metadata for singleton beans anymore...</span></span><br><span class="line">			resetCommonCaches();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>obtainFreshBeanFactory方法中调用了refreshBeanFactory和getBeanFactory方法，refreshBeanFactory和getBeanFactory方法都是模板方法，由子类去实现。AbstractApplicationContext的两个子类：GenericApplicationContext和AbstractRefreshableApplicationContext都提供了refreshBeanFactory的实现，GenericApplicationContext的实现只是设置refreshed和serializationId，AbstractRefreshableApplicationContext则会去创建DefaultListableBeanFactory，并调用loadBeanDefinitions加载BeanDefinition,loadBeanDefinitions方法也是一个抽象方法，具体实现由AbstractRefreshableApplicationContext子类实现。</p>
+<p>ConfigurableWebApplicationContext是所有webContext的父接口，提供了提供了设置web信息的方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setServletContext</span><span class="params">(@Nullable ServletContext servletContext)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setNamespace</span><span class="params">(@Nullable String namespace)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setConfigLocation</span><span class="params">(String configLocation)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setConfigLocations</span><span class="params">(String... configLocations)</span></span>;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/12/26/Spring-2-ApplicationContext/">Spring-2-ApplicationContext</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">babyachievement</a></p>
+        <p><span>发布时间:</span>2018-12-26, 10:28:56</p>
+        <p><span>最后更新:</span>2018-12-28, 16:49:58</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/12/26/Spring-2-ApplicationContext/" title="Spring-2-ApplicationContext">https://babyachievement.github.io/2018/12/26/Spring-2-ApplicationContext/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://babyachievement.github.io/2018/12/26/Spring-2-ApplicationContext/　　作者: babyachievement" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target="_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/12/27/Spring-3-BeanDefinition/">
+                    Spring-3-BeanDefinition
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/12/25/Spring-5-BeanPostProcessor/">
+                    Spring-1-BeanPostProcessor
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ApplicationContext"><span class="toc-number">1.</span> <span class="toc-text">ApplicationContext</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ResourceLoader"><span class="toc-number">1.1.</span> <span class="toc-text">ResourceLoader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ApplicationEventPublisher"><span class="toc-number">1.2.</span> <span class="toc-text">ApplicationEventPublisher</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MessageSource"><span class="toc-number">1.3.</span> <span class="toc-text">MessageSource</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ApplicationContext-继承关系"><span class="toc-number">2.</span> <span class="toc-text">ApplicationContext 继承关系</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录" title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Spring-2-ApplicationContext　| Babyachievement　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/12/27/Spring-3-BeanDefinition/" title="上一篇: Spring-3-BeanDefinition">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/12/25/Spring-5-BeanPostProcessor/" title="下一篇: Spring-1-BeanPostProcessor">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/02/12/Spring-11-spring-cglib-repack/">Spring-11-spring-cglib-repack</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/12/Spring-10-AOP-cglib/">Spring-10-AOP-cglib</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/23/Go-标准库/">Go-标准库</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/22/Go-并发/">Go-并发</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/21/Go-引用类型/">Go-引用类型</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/10/Spring-9-AOP执行过程/">Spring-9-AOP执行过程</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/10/Spring-8-AOP设计与实现/">Spring-8-AOP设计与实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/10/Spring-7-AOP基础/">Spring-7-AOP基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/03/Spring-4-Bean创建/">Spring-4-Bean创建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/28/Spring-3-1-Loading-BeanDefinitions/">Spring-3.1-Loading BeanDefinitions</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/27/Spring-6-BeanFactoryPostProcessor/">Spring-6-BeanFactoryPostProcessor</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/27/Spring-3-BeanDefinition/">Spring-3-BeanDefinition</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/26/Spring-2-ApplicationContext/">Spring-2-ApplicationContext</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/25/Spring-5-BeanPostProcessor/">Spring-1-BeanPostProcessor</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/24/Spring-Boot-0-注入方式/">Spring-Boot-0-注入方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/21/Spring-Boot-0-Configuration/">Spring-Boot-0-@Configuration</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/20/Spring-Boot-1-架构/">Spring Boot-1. 架构</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/12/SOFA/">SOFA</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/28/Spring-Security-Authentication/">Spring-Security-Authentication</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/27/Thymeleaf/">Thymeleaf</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/26/Spring-Security-ACL/">Spring Security: ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/22/Go-读取文件/">Go-读取文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/22/Go-反射/">Go-反射</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/22/Go-第一等公民function/">Go-第一等公民function</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/22/Go-Panic和Recover/">Go-Panic和Recover</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-错误处理/">Go: 错误处理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-Defer/">Go: Defer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-多态/">Go: 多态</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/hello-world/">Hello World</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2018-2019 babyachievement
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style="display:none">
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style="display:none">
+                        <span id="page-visit" title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="//cdn.jsdelivr.net/gh/sukkaw/busuanzi@2.3/bsz.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

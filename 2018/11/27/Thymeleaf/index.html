@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head><meta name="generator" content="Hexo 3.8.0">
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="author" content="babyachievement">
+
+
+
+<meta name="description" content="title: Thymeleafdate: 2018-11-27 14:58:54 tags: [“Java”]Thymeleaf标准表达式语法Thymeleaf有五种语法：  ${} :变量表达式 *{} :选择表达式 #{} :消息（i8n）表达式 @{} :链接表达式 ~{} :片段表达式  变量表达式变量表达式是OGNL表达式，或者Spring EL，在上下文变量中执行，也称作模型属性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Babyachievement">
+<meta property="og:url" content="https://babyachievement.github.io/2018/11/27/Thymeleaf/index.html">
+<meta property="og:site_name" content="Babyachievement">
+<meta property="og:description" content="title: Thymeleafdate: 2018-11-27 14:58:54 tags: [“Java”]Thymeleaf标准表达式语法Thymeleaf有五种语法：  ${} :变量表达式 *{} :选择表达式 #{} :消息（i8n）表达式 @{} :链接表达式 ~{} :片段表达式  变量表达式变量表达式是OGNL表达式，或者Spring EL，在上下文变量中执行，也称作模型属性。">
+<meta property="og:locale" content="cn">
+<meta property="og:updated_time" content="2018-11-27T07:05:44.033Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Babyachievement">
+<meta name="twitter:description" content="title: Thymeleafdate: 2018-11-27 14:58:54 tags: [“Java”]Thymeleaf标准表达式语法Thymeleaf有五种语法：  ${} :变量表达式 *{} :选择表达式 #{} :消息（i8n）表达式 @{} :链接表达式 ~{} :片段表达式  变量表达式变量表达式是OGNL表达式，或者Spring EL，在上下文变量中执行，也称作模型属性。">
+
+<link rel="apple-touch-icon" href="http://localhost:4000/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Babyachievement" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/green/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Babyachievement</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    };
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "http://localhost:4000"; </script>
+
+
+
+
+
+
+</head></html>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://localhost:4000/img/avatar.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">babyachievement</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false">
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class="no-result">No results found <i class="fa fa-spinner fa-pulse"></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="http://localhost:4000/">主页</a></li>
+                        
+                            <li><a href="http://localhost:4000/archives/">所有文章</a></li>
+                        
+                            <li><a href="http://localhost:4000/tags/">标签云</a></li>
+                        
+                            <li><a href="http://localhost:4000/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:babyacievement@gmail.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AOP/">AOP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CGLIB/">CGLIB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Security/">Spring-Security</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">沙弥</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">babyachievement</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://localhost:4000/img/avatar.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">babyachievement</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:babyacievement@gmail.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我">
+</nav>
+      <div class="body-wrap"><article id="post-Thymeleaf" class="article article-type-post" itemscope="" itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/11/27/Thymeleaf/" class="article-date">
+      <time datetime="2018-11-27T06:58:54.261Z" itemprop="datePublished">2018-11-27</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <hr>
+<p>title: Thymeleaf<br>date: 2018-11-27 14:58:54</p>
+<h2 id="tags-“Java”"><a href="#tags-“Java”" class="headerlink" title="tags: [“Java”]"></a>tags: [“Java”]</h2><h2 id="Thymeleaf标准表达式语法"><a href="#Thymeleaf标准表达式语法" class="headerlink" title="Thymeleaf标准表达式语法"></a>Thymeleaf标准表达式语法</h2><p>Thymeleaf有五种语法：</p>
+<ul>
+<li>${} :变量表达式</li>
+<li>*{} :选择表达式</li>
+<li>#{} :消息（i8n）表达式</li>
+<li>@{} :链接表达式</li>
+<li>~{} :片段表达式</li>
+</ul>
+<h3 id="变量表达式"><a href="#变量表达式" class="headerlink" title="变量表达式"></a>变量表达式</h3><p>变量表达式是OGNL表达式，或者Spring EL，在上下文变量中执行，也称作模型属性。写法如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;session.user.name&#125;</span><br></pre></td></tr></table></figure></p>
+<p>变量表达式可以作为标签属性：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;book.author.name&#125;"</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>上面的写法等同于：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((Book)context.getVariable(&quot;book&quot;)).getAuthor().getName()</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/11/27/Thymeleaf/"></a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">babyachievement</a></p>
+        <p><span>发布时间:</span>2018-11-27, 14:58:54</p>
+        <p><span>最后更新:</span>2018-11-27, 15:05:44</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/11/27/Thymeleaf/" title="">https://babyachievement.github.io/2018/11/27/Thymeleaf/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://babyachievement.github.io/2018/11/27/Thymeleaf/　　作者: babyachievement" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target="_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/11/28/Spring-Security-Authentication/">
+                    Spring-Security-Authentication
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/11/26/Spring-Security-ACL/">
+                    Spring Security: ACL
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags-“Java”"><span class="toc-number">1.</span> <span class="toc-text">tags: [“Java”]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thymeleaf标准表达式语法"><span class="toc-number">2.</span> <span class="toc-text">Thymeleaf标准表达式语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量表达式"><span class="toc-number">2.1.</span> <span class="toc-text">变量表达式</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录" title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"　| Babyachievement　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/11/28/Spring-Security-Authentication/" title="上一篇: Spring-Security-Authentication">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/11/26/Spring-Security-ACL/" title="下一篇: Spring Security: ACL">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/02/12/Spring-11-spring-cglib-repack/">Spring-11-spring-cglib-repack</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/12/Spring-10-AOP-cglib/">Spring-10-AOP-cglib</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/23/Go-标准库/">Go-标准库</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/22/Go-并发/">Go-并发</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/21/Go-引用类型/">Go-引用类型</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/10/Spring-9-AOP执行过程/">Spring-9-AOP执行过程</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/10/Spring-8-AOP设计与实现/">Spring-8-AOP设计与实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/10/Spring-7-AOP基础/">Spring-7-AOP基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/03/Spring-4-Bean创建/">Spring-4-Bean创建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/28/Spring-3-1-Loading-BeanDefinitions/">Spring-3.1-Loading BeanDefinitions</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/27/Spring-6-BeanFactoryPostProcessor/">Spring-6-BeanFactoryPostProcessor</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/27/Spring-3-BeanDefinition/">Spring-3-BeanDefinition</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/26/Spring-2-ApplicationContext/">Spring-2-ApplicationContext</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/25/Spring-5-BeanPostProcessor/">Spring-1-BeanPostProcessor</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/24/Spring-Boot-0-注入方式/">Spring-Boot-0-注入方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/21/Spring-Boot-0-Configuration/">Spring-Boot-0-@Configuration</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/20/Spring-Boot-1-架构/">Spring Boot-1. 架构</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/12/SOFA/">SOFA</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/28/Spring-Security-Authentication/">Spring-Security-Authentication</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/27/Thymeleaf/">Thymeleaf</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/26/Spring-Security-ACL/">Spring Security: ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/22/Go-读取文件/">Go-读取文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/22/Go-反射/">Go-反射</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/22/Go-第一等公民function/">Go-第一等公民function</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/22/Go-Panic和Recover/">Go-Panic和Recover</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-错误处理/">Go: 错误处理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-Defer/">Go: Defer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Go-多态/">Go: 多态</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/hello-world/">Hello World</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2018-2019 babyachievement
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style="display:none">
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style="display:none">
+                        <span id="page-visit" title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="//cdn.jsdelivr.net/gh/sukkaw/busuanzi@2.3/bsz.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
